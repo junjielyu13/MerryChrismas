@@ -8,8 +8,6 @@ posponer = 0.1
 # Variables per els marcadors
 score = 0
 high_score = 0
-x = -1
-y = -1
 
 
 # Generem finestra
@@ -42,11 +40,6 @@ segmentos = []
 # Bloques
 bloques = []
 
-# position of elements
-PosComida = set()
-PosComida1 = set()
-Posbloques = set()
-
 # TEXTO
 texto = turtle.Turtle()
 texto.speed(0)
@@ -56,7 +49,6 @@ texto.hideturtle()
 texto.goto(0, 260)
 texto.write("Score: 0       High Score:  0",
             align="center", font=("Courier", 24, "normal"))
-
 
 # PAS 4
 
@@ -106,7 +98,6 @@ def mov():
 cabeza = turtle.Turtle()
 cabeza.speed(0)
 cabeza.shape("square")
-
 cabeza.color("LightSkyBlue")
 cabeza.penup()
 cabeza.goto(0, 0)
@@ -143,44 +134,23 @@ def gameOver(score):
     # game.tracer(0)
 
     # Resetear marcador
-    textoWrite(texto, score, high_score)
+    texto.clear()
+    score = 0
+    texto.write(f"Score: {score}       High Score:  {high_score}",
+                align="center", font=("Courier", 24, "normal"))
 
     root = Tk()
     root.title("GAMEOVER")
     root.geometry("250x250")
     root.eval('tk::PlaceWindow . center')
-
-    Label(root,
-          text=f"Score: {score}",
-          font=("Inter", 14)
-          ).grid(row=2, column=2, pady=25, padx=80)
-
-    Label(root,
-          text=f"High Score: {high_score}",
-          font=("Inter", 14)
-          ).grid(row=6, column=2, pady=25, padx=60)
-
-    Button(root,
-           text="Continue",
-           command=root.destroy,
-           font=("Inter", 14),
-           fg='black'
-           ).grid(row=10, column=2, pady=25, padx=80)
-
+    Label(root, text=f"Score: {score}").grid(row=2, column=0)
+    Label(root, text=f"High Score: {high_score}").grid(row=2, column=2)
+    Button(root, text=f"Continue", command=root.destroy).grid(row=4, column=1)
     return 0
-
-
-def textoWrite(texto, score, high_score):
-    texto.clear()
-    texto.write("Score:{}      High Score:{}".format(score, high_score), align="center",
-                font=("Courier", 24, "normal"))
 
 
 while True:
     wn.update()
-
-    if score == 0:
-        textoWrite(texto, score, high_score)
 
     # PAS 9: Colisiones bordes
     if cabeza.xcor() > 280 or cabeza.xcor() < -280 or cabeza.ycor() > 280 or cabeza.ycor() < -280:
@@ -198,15 +168,9 @@ while True:
 
 # El quadrat fa 20 píxel x 20 píxels i el cercle igual de radi
     if cabeza.distance(comida) < 20:
-
-        PosComida.clear()
-        while True:
-            x = random.randint(-280, 280)
-            y = random.randint(-280, 280)
-            if (x, y) not in PosComida1 and (x, y) not in Posbloques:
-                comida.goto(x, y)
-                PosComida.add((x, y))
-                break
+        x = random.randint(-280, 280)
+        y = random.randint(-280, 280)
+        comida.goto(x, y)
 
         # Per anar eliminant un segmento a la llista cada vegada que hi hagi contacte
         if len(segmentos) > 0:
@@ -215,7 +179,6 @@ while True:
             lastone.goto(1000, 1000)
             lastone.clear()
         else:
-            score = 0
             score = gameOver(score)
 
         # Augmentar marcador
@@ -223,50 +186,34 @@ while True:
         if score > high_score:
             high_score = score
 
-        textoWrite(texto, score, high_score)
+        texto.clear()
+        texto.write("Score: {}       High Score:  {}".format(score, high_score), align="center",
+                    font=("Courier", 24, "normal"))
 
     if cabeza.distance(comida1) < 20:
-
-        PosComida1.clear()
-        while True:
-            x = random.randint(-280, 280)
-            y = random.randint(-280, 280)
-            if (x, y) not in PosComida1 and (x, y) not in Posbloques:
-                comida1.goto(x, y)
-                PosComida1.add((x, y))
-                break
-
+        x = random.randint(-280, 280)
+        y = random.randint(-280, 280)
+        comida1.goto(x, y)
         nuevo_segmento = turtle.Turtle()
         nuevo_segmento.speed(0)
         nuevo_segmento.shape("square")
         nuevo_segmento.color("LightSkyBlue1")
         nuevo_segmento.penup()
         segmentos.append(nuevo_segmento)
-
-        if score < 0:
-            score = 20
-        else:
-            score += 20
+        score += 20
         if score > high_score:
             high_score = score
-
-        textoWrite(texto, score, high_score)
+        texto.clear()
+        texto.write("Score: {}       High Score:  {}".format(score, high_score), align="center",
+                    font=("Courier", 24, "normal"))
 
         Bloque1 = turtle.Turtle()
         Bloque1.speed(0)
         Bloque1.shape("square")
         Bloque1.color("black")
         Bloque1.penup()
+        Bloque1.goto(random.randint(-280, 280), random.randint(-280, 280))
 
-        while True:
-            x = random.randint(-280, 280)
-            y = random.randint(-280, 280)
-            if (x, y) not in PosComida and (x, y) not in PosComida1:
-                Bloque1.goto(x, y)
-                Posbloques.add((x, y))
-                break
-
-        Bloque1.goto(x, y)
         bloques.append(Bloque1)
 
     # Mover el cuerpo de la serpiente
