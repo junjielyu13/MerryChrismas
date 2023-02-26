@@ -22,10 +22,6 @@ wn.setup(width=600, height=600)
 wn.tracer(0)
 
 
-wn.title("SNAKE")
-wn.bgcolor("beige")
-wn.setup(width=600, height=600)
-
 # Comida
 red = turtle.Turtle()
 red.speed(0)
@@ -60,7 +56,7 @@ bloques = []
 
 # position of elements
 PosRed = set()
-PosComida1 = set()
+PosOrange = set()
 PosGreen = set()
 Posbloques = set()
 
@@ -207,18 +203,27 @@ while True:
         while True:
             x = random.randint(-280/20, 280/20)*20
             y = random.randint(-280/20, 280/20)*20
-            if (x, y) not in PosComida1 and (x, y) not in Posbloques and (x, y) not in PosGreen:
+            if (x, y) not in PosOrange and (x, y) not in Posbloques and (x, y) not in PosGreen:
                 red.goto(x, y)
                 PosRed.add((x, y))
                 break
 
-        PosComida1.clear()
+        PosOrange.clear()
         while True:
             x = random.randint(-280/20, 280/20)*20
             y = random.randint(-280/20, 280/20)*20
-            if (x, y) not in PosComida1 and (x, y) not in Posbloques and (x, y) not in PosGreen:
+            if (x, y) not in PosOrange and (x, y) not in Posbloques and (x, y) not in PosGreen:
                 orange.goto(x, y)
-                PosComida1.add((x, y))
+                PosOrange.add((x, y))
+                break
+
+        PosGreen.clear()
+        while True:
+            x = random.randint(-280/20, 280/20)*20
+            y = random.randint(-280/20, 280/20)*20
+            if (x, y) not in PosOrange and (x, y) not in Posbloques and (x, y) not in PosRed:
+                green.goto(x, y)
+                PosGreen.add((x, y))
                 break
 
         # Per anar eliminant un segmento a la llista cada vegada que hi hagi contacte
@@ -243,7 +248,7 @@ while True:
         while True:
             x = random.randint(-280/20, 280/20)*20
             y = random.randint(-280/20, 280/20)*20
-            if (x, y) not in PosComida1 and (x, y) not in Posbloques and (x, y) not in PosRed:
+            if (x, y) not in PosOrange and (x, y) not in Posbloques and (x, y) not in PosRed:
                 green.goto(x, y)
                 PosGreen.add((x, y))
                 break
@@ -257,15 +262,21 @@ while True:
             bloque.goto(1000, 1000)
             bloque.clear()
 
+        score -= 10
+        if score > high_score:
+            high_score = score
+
+        textoWrite(texto, score, high_score)
+
     if cabeza.distance(orange) < 20:
 
-        PosComida1.clear()
+        PosOrange.clear()
         while True:
             x = random.randint(-280/20, 280/20)*20
             y = random.randint(-280/20, 280/20)*20
-            if (x, y) not in PosComida1 and (x, y) not in Posbloques and (x, y) not in PosGreen:
+            if (x, y) not in PosOrange and (x, y) not in Posbloques and (x, y) not in PosGreen:
                 orange.goto(x, y)
-                PosComida1.add((x, y))
+                PosOrange.add((x, y))
                 break
 
         nuevo_segmento = turtle.Turtle()
@@ -293,7 +304,7 @@ while True:
         while True:
             x = random.randint(-280/20, 280/20)*20
             y = random.randint(-280/20, 280/20)*20
-            if (x, y) not in PosRed and (x, y) not in PosComida1 and (x, y) not in PosGreen:
+            if (x, y) not in PosRed and (x, y) not in PosOrange and (x, y) not in PosGreen:
                 Bloque1.goto(x, y)
                 Posbloques.add((x, y))
                 break
