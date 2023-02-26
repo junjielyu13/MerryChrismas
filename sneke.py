@@ -21,21 +21,37 @@ wn.setup(width=600, height=600)
 # El tracer fa les animacions més suaus
 wn.tracer(0)
 
+
+wn.title("SNAKE")
+wn.bgcolor("beige")
+wn.setup(width=600, height=600)
+
 # Comida
-comida = turtle.Turtle()
-comida.speed(0)
-comida.shape("circle")
-comida.color("red")
-comida.penup()
-comida.goto(random.randint(-280, 280), random.randint(-280, 280))
+red = turtle.Turtle()
+red.speed(0)
+red.shape("circle")
+red.color("red")
+red.penup()
+red.goto(random.randint(-280/20, 280/20)*20,
+         random.randint(-280/20, 280/20)*20)
 
 # Comida1
-comida1 = turtle.Turtle()
-comida1.speed(0)
-comida1.shape("circle")
-comida1.color("orange")
-comida1.penup()
-comida1.goto(random.randint(-280, 280), random.randint(-280, 280))
+orange = turtle.Turtle()
+orange.speed(0)
+orange.shape("circle")
+orange.color("orange")
+orange.penup()
+orange.goto(random.randint(-280/20, 280/20)*20,
+            random.randint(-280/20, 280/20)*20)
+
+# Comida1
+green = turtle.Turtle()
+green.speed(0)
+green.shape("circle")
+green.color("green")
+green.penup()
+green.goto(random.randint(-280/20, 280/20)*20,
+           random.randint(-280/20, 280/20)*20)
 
 # Cos de la serp (segments)
 segmentos = []
@@ -43,8 +59,9 @@ segmentos = []
 bloques = []
 
 # position of elements
-PosComida = set()
+PosRed = set()
 PosComida1 = set()
+PosGreen = set()
 Posbloques = set()
 
 # TEXTO
@@ -113,13 +130,6 @@ cabeza.goto(0, 0)
 cabeza.direction = "stop"
 
 
-def GameExit(root):
-    # root.destroy
-    # time.sleep(0.5)
-    # turtle.Screen().bye()
-    pass
-
-
 def gameOver(score):
     time.sleep(1)
     cabeza.goto(0, 0)
@@ -135,12 +145,6 @@ def gameOver(score):
         segmento.goto(1000, 1000)
         segmento.clear()
     segmentos.clear()
-
-    #game = turtle.Screen()
-    # game.title("GAMEOVER")
-    # game.bgcolor("beige")
-    #game.setup(width=600, height=600)
-    # game.tracer(0)
 
     # Resetear marcador
     textoWrite(texto, score, high_score)
@@ -197,15 +201,24 @@ while True:
 
 
 # El quadrat fa 20 píxel x 20 píxels i el cercle igual de radi
-    if cabeza.distance(comida) < 20:
+    if cabeza.distance(red) < 20:
 
-        PosComida.clear()
+        PosRed.clear()
         while True:
-            x = random.randint(-280, 280)
-            y = random.randint(-280, 280)
-            if (x, y) not in PosComida1 and (x, y) not in Posbloques:
-                comida.goto(x, y)
-                PosComida.add((x, y))
+            x = random.randint(-280/20, 280/20)*20
+            y = random.randint(-280/20, 280/20)*20
+            if (x, y) not in PosComida1 and (x, y) not in Posbloques and (x, y) not in PosGreen:
+                red.goto(x, y)
+                PosRed.add((x, y))
+                break
+
+        PosComida1.clear()
+        while True:
+            x = random.randint(-280/20, 280/20)*20
+            y = random.randint(-280/20, 280/20)*20
+            if (x, y) not in PosComida1 and (x, y) not in Posbloques and (x, y) not in PosGreen:
+                orange.goto(x, y)
+                PosComida1.add((x, y))
                 break
 
         # Per anar eliminant un segmento a la llista cada vegada que hi hagi contacte
@@ -225,14 +238,33 @@ while True:
 
         textoWrite(texto, score, high_score)
 
-    if cabeza.distance(comida1) < 20:
+    if cabeza.distance(green) < 20:
+        PosGreen.clear()
+        while True:
+            x = random.randint(-280/20, 280/20)*20
+            y = random.randint(-280/20, 280/20)*20
+            if (x, y) not in PosComida1 and (x, y) not in Posbloques and (x, y) not in PosRed:
+                green.goto(x, y)
+                PosGreen.add((x, y))
+                break
+
+        # Bloques
+        if len(bloques):
+            bloque = bloques[random.randint(0, len(bloques)-1)]
+
+            Posbloques.remove((bloque.position()[0], bloque.position()[1]))
+            bloques.remove(bloque)
+            bloque.goto(1000, 1000)
+            bloque.clear()
+
+    if cabeza.distance(orange) < 20:
 
         PosComida1.clear()
         while True:
-            x = random.randint(-280, 280)
-            y = random.randint(-280, 280)
-            if (x, y) not in PosComida1 and (x, y) not in Posbloques:
-                comida1.goto(x, y)
+            x = random.randint(-280/20, 280/20)*20
+            y = random.randint(-280/20, 280/20)*20
+            if (x, y) not in PosComida1 and (x, y) not in Posbloques and (x, y) not in PosGreen:
+                orange.goto(x, y)
                 PosComida1.add((x, y))
                 break
 
@@ -259,9 +291,9 @@ while True:
         Bloque1.penup()
 
         while True:
-            x = random.randint(-280, 280)
-            y = random.randint(-280, 280)
-            if (x, y) not in PosComida and (x, y) not in PosComida1:
+            x = random.randint(-280/20, 280/20)*20
+            y = random.randint(-280/20, 280/20)*20
+            if (x, y) not in PosRed and (x, y) not in PosComida1 and (x, y) not in PosGreen:
                 Bloque1.goto(x, y)
                 Posbloques.add((x, y))
                 break
