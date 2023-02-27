@@ -18,7 +18,7 @@ y = -1
 wn = turtle.Screen()
 wn.title("SNAKE")
 wn.bgcolor("beige")
-wn.setup(width=620, height=620)
+wn.setup(width=620, height=650)
 
 # El tracer fa les animacions més suaus
 wn.tracer(0)
@@ -280,7 +280,7 @@ texto.speed(0)
 texto.color("black")
 texto.penup()
 texto.hideturtle()
-texto.goto(0, 235)
+texto.goto(0, 290)
 texto.write("Score: 0       High Score:  0",
             align="center", font=("Courier", 24, "normal"))
 
